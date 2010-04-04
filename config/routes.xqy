@@ -8,15 +8,16 @@ declare variable $routes :=
          - /css/
          - /js/
          --> 
-  <resource name="user">
-    <include action="promote"/>
+  <resource name="user"/>
+  <resource name="album">
+    <include action="songs"/>
   </resource>
   <match path="/feed">
     <redirect_to> http://feedburner.com/sample_feed </redirect_to>
   </match>
   <match path="/logout"> <to> sessions#delete </to> </match>
   <match path="/activate/:key"> <to> user#activate </to> </match>
-  <root> user#list </root> 
+  <root> album#list </root> 
   <match path="/:resource/:action/:id"/>
 </routes> 
   ;

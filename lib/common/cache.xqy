@@ -1,7 +1,8 @@
 (:
- : Page not found !
+ : Cache manipulation functions for Dylan 
  :
- : Copyright (c) 2010 Nuno Job [nunojob.com]. All Rights Reserved.
+ : Copyright (c) 2010 Nuno Job [about.nunojob.com].
+ : All Rights Reserved.
  :
  : Licensed under the Apache License, Version 2.0 (the "License");
  : you may not use this file except in compliance with the License.
@@ -18,9 +19,9 @@
  : The use of the Apache License does not indicate that this project is
  : affiliated with the Apache Software Foundation.
  :)
-xquery version "1.0-ml";
-import module
-  namespace d = "http://ns.dscape.org/2010/dylan/core"
-  at "base.xqy" ;
+xquery version "1.0-ml" ;
+module namespace c = "http://ns.dscape.org/2010/dylan/cache" ;
+declare namespace d = "http://ns.dscape.org/2010/dylan/core" ;
 
-d:error( 404, "Page not found", () )
+declare function c:kvpair( $k, $v ) {
+  <d:kvp key="{ $k }" value="{ $v }"/> };
