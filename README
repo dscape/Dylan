@@ -1,0 +1,74 @@
+What is this?
+''''''''''''
+A RESTful framework for rapid development in marklogic server
+
+Should I use it?
+'''''''''''''''
+This is not usable - refer to RDBC for a proof of concept that actually works
+currently cleaning up the code and adding more functionality
+
+Ideas
+'''''
+  1) Supporting compression (gzip) would be nice for put, get and post
+     but requires a slightly more complicated client (and server)
+  2) Application level security allows protecting some calls while
+     leaving others unprotected
+  3) User agent to drive browsers to html and curl to xml
+  4) A memcached implementation
+     /_caches/song.xml
+     /_caches/_setup.xml    -> stores things that are created on startup
+     /_caches/_routes.xml   -> stores the routes
+     /_caches/_app.xml      -> page cache for sweeping
+     /_caches/_consistenthash.xml
+     create your own
+  5) Use directories in database to store those files
+  6) Introduce notion of tasks (spawns)
+  7) We need a restful way to address the admin api...
+     Maybe narthex, maybe the api itself as its already deployed in every
+        marklogic install (sounds like a good default)
+  
+Sample Invocations
+''''''''''''''''''
+
+  1) Create file one.xml (you need an xml file named one.xml in the working directory)
+
+     curl \
+       --request POST \
+       --data "@one.xml" \
+       --anyauth \
+       http://user:pwd@localhost:8010/doc/one.xml
+
+ 2) Update file book.xml (you need an xml file named two.xml in the working directory)
+
+    curl \
+      --request PUT \
+      --data "@two.xml" \
+      --anyauth \
+      http://user:pwd@localhost:8010/doc/one.xml
+
+ 3) Get file book.xml in json
+
+    curl \
+      --header "Accept: application/json" \
+      --anyauth \
+      http://user:pwd@localhost:8010/doc/one.xml 
+
+ 4) Get file book.xml
+ 
+    curl \
+      --anyauth \
+      http://user:pwd@localhost:8010/doc/one.xml 
+
+ 5) Delete file one.xml
+
+  curl \
+     --request DELETE \
+     --anyauth \
+     http://user:pwd@localhost:8010/doc/one.xml
+
+  6) An invalid route
+  
+     curl \
+       --header "Accept: application/json" \
+       --anyauth \
+       http://user:pwd@localhost:8010
