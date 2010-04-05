@@ -7,6 +7,30 @@ Should I use it?
 This is not usable - refer to RDBC for a proof of concept that actually works
 currently cleaning up the code and adding more functionality
 
+I'm trying to get ahead of you, but what's this cache thingy?
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+It's a mapping, that going to be stored in something like a persistent 
+memcached inside marklogic (using range indexes). This is how it looks like
+for the sample routes that come with the instalation.
+
+<d:cache xmlns:d="http://ns.dscape.org/2010/dylan/core">
+  <d:kvp key="get /user/:id" value="/resources/user.xqy?_action=get"/>
+  <d:kvp key="post /user/:id" value="/resources/user.xqy?_action=post"/>
+  <d:kvp key="put /user/:id" value="/resources/user.xqy?_action=put"/>
+  <d:kvp key="delete /user/:id" value="/resources/user.xqy?_action=delete"/>
+  <d:kvp key="get /album/:id" value="/resources/album.xqy?_action=get"/>
+  <d:kvp key="post /album/:id" value="/resources/album.xqy?_action=post"/>
+  <d:kvp key="put /album/:id" value="/resources/album.xqy?_action=put"/>
+  <d:kvp key="delete /album/:id" value="/resources/album.xqy?_action=delete"/>
+  <d:kvp key="get /album/:id/songs" value="/resources/album.xqy?_action=songs"/>
+  <d:kvp key="get /feed" 
+    value="/lib/dylan/redirect.xqy?url=http%3a//feedburner.com/sample_feed"/>
+  <d:kvp key="get /logout" value="/resources/sessions.xqy?_action=delete"/>
+  <d:kvp key="get /activate/:key" value="/resources/user.xqy?_action=activate"/>
+  <d:kvp key="get /" value="/resources/album.xqy?_action=list"/>
+  <d:kvp key="get /:resource/:action/:id" value="/lib/dylan/invoke.xqy"/>
+</d:cache>
+
 Ideas
 '''''
   1) Supporting compression (gzip) would be nice for put, get and post

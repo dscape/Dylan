@@ -24,15 +24,15 @@ declare
 
 import module 
   namespace r = "http://ns.dscape.org/2010/dylan/cfg/routes" 
-  at "../../config/routes.xqy" ;
+  at "config/routes.xqy" ;
 
 import module 
   namespace d = "http://ns.dscape.org/2010/dylan/core"
-  at "../dylan/base.xqy";
+  at "lib/dylan/base.xqy";
 
 import module 
   namespace c = "http://ns.dscape.org/2010/dylan/cache"
-  at "../common/cache.xqy";
+  at "lib/common/cache.xqy";
 
 (: idea is to put in the cache to avoid overhead of doing this 
    for every request - refreshed when application is refreshed
@@ -47,10 +47,11 @@ declare function r:match( $node ) {
                   return c:kvpair( $k, $file )
            else if ( $node/d:redirect_to ) 
                 then c:kvpair( $k,
-                       fn:concat( "/lib/dylan/redirect.xqy?url=",
+                       fn:concat( 
+                         "/lib/dylan/invoke.xqy?_action=redirect&amp;url=",
                        xdmp:url-encode(
                          fn:normalize-space( $node/d:redirect_to ) ) ) )
-                else c:kvpair( $k, "/lib/dylan/invoke.xqy" ) } ;
+                else c:kvpair( $k, "/lib/dylan/invoke.xqy?_action=default" ) } ;
 
 declare function r:resource($node) {
   let $r     := $node/@name
@@ -85,46 +86,33 @@ declare function r:extract-labels($node) {
   fn:analyze-string($node, ":([\w|\-|_]+)") //s:match/s:group/fn:string(.) } ;
 
 (: will be in memory in a next iteration when caches are implemented :)
-let $cache :=
-  <d:cache> {
-    let $r := r:routes() 
-      return for $e in $r/d:routes/* return r:transform($e) }
-  </d:cache>
-  let $_ := xdmp:log($cache)
-let $req := fn:string-join( ( d:verb(), d:route()), " " )
-let $selected := $cache //d:kvp [ fn:matches( $req, fn:concat( 
-  r:generate-regular-expression(@key), "$" ) ) ] [1]
-return   if ($selected)
-         then let $route    := $selected/@key
-                let $file   := $selected/@value
-                let $regexp := r:generate-regular-expression( $route )
-                let $labels := r:extract-labels($route)
-                let $_ := xdmp:log ( $regexp )
-                let $_ := xdmp:log( fn:string-join($labels, ", ") )
-                let $_ := xdmp:log ( $route )
-                return "not404.xqy"
-         else "404.xqy"
-
-(: remember to add public as accessible from outside :)
-(: let $routes   := r:routes()
-  let $route    := d:route()
-  let $selected := $routes //d:route [
-      fn:matches($route, d:pattern) 
-      and d:verb() = d:verb ] [1]
-  return if ($selected)
-         then
-           let $pattern  := $selected//d:pattern
-           let $resource := $selected/d:resource/@name
-           let $redirect := fn:concat($resource, ".xqy")
-           let $params   := fn:concat( "?", 
-                              fn:string-join( for $p in $selected//d:match
-                                return 
-                                  let $resource := xdmp:url-encode(
-                                    fn:analyze-string($route,$pattern)
-                                      //s:group[@nr eq $p/@nr] )
-                                  return if ($resource)
-                                         then fn:concat( fn:string($p), "=",
-                                   $resource ) else () , "&amp;" ) )
-           return fn:concat($redirect, $params)
+let $route := d:route()
+  let $req := fn:string-join( ( d:verb(), d:route()), " " )
+  return if ( fn:matches($req,  "get /(images|css|js)/.*") )
+         then fn:concat("/public", $route)
          else
-           "404.xqy" :)
+    let $cache :=
+      <d:cache> { 
+        c:kvpair("get /db/:uri", "/lib/dylan/get-file.xqy?_action=get") }
+        { let $r := r:routes() 
+          return for $e in $r/d:routes/* return r:transform($e) }
+      </d:cache>
+      let $selected := $cache //d:kvp [ fn:matches( $req, fn:concat( 
+        r:generate-regular-expression(@key), "$" ) ) ] [1]
+      return if ($selected)
+             then let $route     := $selected/@key
+                    let $file    := $selected/@value
+                    let $regexp  := r:generate-regular-expression( $route )
+                    let $labels  := r:extract-labels($route)
+                    let $matches := fn:analyze-string($req, $regexp) 
+                                      //s:match/s:group/fn:string(.)
+                    let $params := if ($matches) 
+                      then fn:concat( "&amp;",
+                        fn:string-join( for $match at $p in $matches
+                          return fn:concat("_", $labels[$p], "=",
+                            xdmp:url-encode($match)) , "&amp;") )
+                      else ""
+                    return fn:concat($file, $params)
+             else "404.xqy"
+  
+  (: remember to add public as accessible from outside :)

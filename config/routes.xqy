@@ -7,7 +7,24 @@ declare variable $routes :=
          - /images/
          - /css/
          - /js/
-         --> 
+         - /db/
+         
+         Dont use as name, I mean /images cannot work both ways right?
+         It goes to public and that is it.
+         
+         /db/ allows reading files from the database
+         
+         Don't use 'action', 'resource', or 'id' as name. 
+         These are reserved to the framework. Also please dont use anything
+         starting with underscore (_). If you want to crash the thing it's fine,
+         but if you don't then do as stated :P   
+         
+         Also names are supposed to be uri encoded, so just stick to the alpha
+         -bet and numbers.      
+         
+         I am not going to program checks to see if your doing it right.
+         
+         Testing would be nice though :) --> 
   <resource name="user"/>
   <resource name="album">
     <include action="songs"/>
