@@ -103,8 +103,8 @@ let $route := d:route()
              then let $route     := $selected/@key
                     let $file    := $selected/@value
                     let $regexp  := r:generate-regular-expression( $route )
-                    let $labels  := r:extract-labels($route)
-                    let $matches := fn:analyze-string($req, $regexp) 
+                    let $labels  := r:extract-labels( $route )
+                    let $matches := fn:analyze-string( $req, $regexp ) 
                                       //s:match/s:group/fn:string(.)
                     let $params := if ($matches) 
                       then fn:concat( "&amp;",
@@ -114,5 +114,3 @@ let $route := d:route()
                       else ""
                     return fn:concat($file, $params)
              else "404.xqy"
-  
-  (: remember to add public as accessible from outside :)
