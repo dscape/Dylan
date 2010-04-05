@@ -7,6 +7,17 @@ Should I use it?
 This is not usable - refer to RDBC for a proof of concept that actually works
 currently cleaning up the code and adding more functionality
 
+Next steps
+''''''''''
+  - Make it work with defaults, doing something just to show
+  - Then generalize everything and program the generators
+    - Most likely in ruby
+  - Code the tests
+    - Most likely in cucumber, because miguel said its cool
+  - Then implement the caches
+    - To prevent the heavy calculations
+    
+
 I'm trying to get ahead of you, but what's this cache thingy?
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 It's a mapping, that going to be stored in something like a persistent 
