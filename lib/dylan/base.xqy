@@ -22,7 +22,7 @@ xquery version "1.0-ml";
 module namespace d = "http://ns.dscape.org/2010/dylan/core";
 
 import module namespace s = "http://ns.dscape.org/2010/dylan/string" 
-  at "../common/string.xqy" ;
+  at "/lib/common/string.xqy" ;
 
 declare variable $content-types :=
   ( "application/xhtml+xml", "application/xml" ) ;
@@ -34,12 +34,12 @@ declare function d:render( $resource, $template, $params ) {
     let $template     := fn:lower-case( $template )
     let $http-code    := ( $params//d:http-code, 200 ) [1]
     let $description  := ( $params//d:description, "OK" ) [1]
-    let $uri          := s:q( "../../templates/$1/$2.$3.xqy", 
+    let $uri          := s:q( "/views/$1/$2.$3.xqy", 
                                  ( $resource, $template, $format ) )
-    let $_ := xdmp:set-response-content-type( $content-type )
+    let $_ := xdmp:set-response-content-type( $content-type//text() )
     let $_ := xdmp:set-response-code( $http-code, $description )
     return xdmp:invoke( $uri, ( xs:QName( "params" ), 
-             if($params) 
+             if( $params ) 
              then $params 
              else <d:empty/>),
              <options xmlns="xdmp:eval">
@@ -48,8 +48,10 @@ declare function d:render( $resource, $template, $params ) {
              </options> ) };
 
 declare function d:content-type() {
-  let $content-type := ( $content-types
-      [ . = xdmp:get-request-header( "Accept" ) ], $default-type ) [1]
+  let $accept-types := fn:tokenize( fn:replace( 
+      xdmp:get-request-header( "Accept" ), ";q=(\w|\.)+", "" ), "," )
+    let $content-type  := 
+      ( $content-types [ . = $accept-types ], $default-type ) [1]
     return <d:content-type>
              <d:ext> { fn:tokenize ( ( fn:tokenize( $content-type, "/" ) [2] ),
                                      "\+" ) [1] } </d:ext>
@@ -61,10 +63,6 @@ declare function d:error( $http-code, $description, $stack-trace ) {
     <d:http-code> { $http-code } </d:http-code>
     <d:description> { $description } </d:description>
     <d:stack-trace> { $stack-trace } </d:stack-trace> </d:params>) } ;
-
-declare function d:verb() { fn:lower-case( xdmp:get-request-method() ) } ;
-
-declare function d:route() { xdmp:get-request-path() } ;
 
 declare function d:request() {
   <d:options>
@@ -91,3 +89,16 @@ declare function d:request() {
     </d:body>
     </d:request>
   </d:options> } ;
+
+declare function d:verb() { fn:lower-case( xdmp:get-request-method() ) } ;
+declare function d:route() { xdmp:get-request-path() } ;
+
+(: more for method missing :)
+declare function d:action() { 
+  fn:lower-case( xdmp:get-request-field( '_action' ) ) } ;
+declare function d:resource() { 
+  fn:lower-case( xdmp:get-request-field( '_resource' ) ) } ;
+declare function d:id() { 
+  fn:lower-case( xdmp:get-request-field( '_id' ) ) } ;
+declare function d:function() { 
+  fn:lower-case( xdmp:get-request-field( '_function' ) ) } ;

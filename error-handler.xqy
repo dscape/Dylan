@@ -1,5 +1,5 @@
 (:
- : Error Handler for RDBC
+ : Error Handler for Dylan
  :
  : Copyright (c) 2010 Nuno Job [about.nunojob.com]. All Rights Reserved.
  :

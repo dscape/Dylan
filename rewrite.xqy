@@ -24,15 +24,15 @@ declare
 
 import module 
   namespace r = "http://ns.dscape.org/2010/dylan/cfg/routes" 
-  at "config/routes.xqy" ;
+  at "/config/routes.xqy" ;
 
 import module 
   namespace d = "http://ns.dscape.org/2010/dylan/core"
-  at "lib/dylan/base.xqy";
+  at "/lib/dylan/base.xqy";
 
 import module 
   namespace c = "http://ns.dscape.org/2010/dylan/cache"
-  at "lib/common/cache.xqy";
+  at "/lib/common/cache.xqy";
 
 (: idea is to put in the cache to avoid overhead of doing this 
    for every request - refreshed when application is refreshed
@@ -93,7 +93,7 @@ let $route := d:route()
          else
     let $cache :=
       <d:cache> { 
-        c:kvpair("get /db/:uri", "/lib/dylan/get-file.xqy?_action=get") }
+        c:kvpair("get /db/:uri", "get-file.xqy?_action=get") }
         { let $r := r:routes() 
           return for $e in $r/d:routes/* return r:transform($e) }
       </d:cache>
@@ -112,5 +112,6 @@ let $route := d:route()
                           return fn:concat("_", $labels[$p], "=",
                             xdmp:url-encode($match)) , "&amp;") )
                       else ""
+                      let $_ := xdmp:log(fn:concat($file, $params))
                     return fn:concat($file, $params)
              else "404.xqy"

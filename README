@@ -107,3 +107,22 @@ Sample Invocations
        --header "Accept: application/json" \
        --anyauth \
        http://user:pwd@localhost:8010
+       
+document inserts
+''''''''''''''''
+xdmp:document-insert("/album/bon+jovi-a+dummy+album.xml",
+  document { <album>
+    <title> A Dummy Album </title>
+    <artist> Jon Bon Jovi </artist>
+    <song> One </song>
+    <song> Two </song>
+  </album> }
+);
+xdmp:document-insert("/album/brian+adams-a+summer+album.xml",
+  document { <album>
+    <title> A Summer Album </title>
+    <artist> Brian Adams</artist>
+    <song> Yet </song>
+    <song> Another </song>
+  </album> }
+)

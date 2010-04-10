@@ -1,7 +1,7 @@
 (:
- : Page not found !
+ : Sample Model in Dylan - while there are no generators
  :
- : Copyright (c) 2010 Nuno Job [nunojob.com]. All Rights Reserved.
+ : Copyright (c) 2010 Nuno Job [about.nunojob.com]. All Rights Reserved.
  :
  : Licensed under the Apache License, Version 2.0 (the "License");
  : you may not use this file except in compliance with the License.
@@ -19,8 +19,7 @@
  : affiliated with the Apache Software Foundation.
  :)
 xquery version "1.0-ml";
-import module
-  namespace d = "http://ns.dscape.org/2010/dylan/core"
-  at "/lib/dylan/base.xqy" ;
+module namespace album = "my-album";
 
-d:error( 404, "Page not found", () )
+declare function album:find-by-title( $title ) {
+  fn:doc() /album [ title = xdmp:url-decode( $title ) ] } ;

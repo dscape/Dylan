@@ -27,7 +27,7 @@ declare variable $routes :=
          Testing would be nice though :) --> 
   <resource name="user"/>
   <resource name="album">
-    <include action="songs"/>
+    <include action="list"/>
   </resource>
   <match path="/feed">
     <redirect_to> http://feedburner.com/sample_feed </redirect_to>
@@ -35,7 +35,7 @@ declare variable $routes :=
   <match path="/logout"> <to> sessions#delete </to> </match>
   <match path="/activate/:key"> <to> user#activate </to> </match>
   <root> album#list </root> 
-  <match path="/:resource/:action/:id"/>
+  <match path="/:resource/:function/:id"/>
 </routes> 
   ;
 
