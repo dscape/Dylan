@@ -16,6 +16,9 @@ Next steps
     - Most likely in cucumber, because miguel said its cool
   - Then implement the caches
     - To prevent the heavy calculations
+  - Add /_sessions folder
+  - Add method to sanitize input, or make it automatic with the generated
+    xml. Maybe sanitized inputs
     
 
 I'm trying to get ahead of you, but what's this cache thingy?
