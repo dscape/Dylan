@@ -19,6 +19,7 @@ Next steps
   - Add /_sessions folder
   - Add method to sanitize input, or make it automatic with the generated
     xml. Maybe sanitized inputs
+  - No layouts… We need layouts or its just crazy
     
 
 I'm trying to get ahead of you, but what's this cache thingy?
