@@ -2,7 +2,7 @@ xquery version "1.0-ml";
 (:
  : Extracting files from the database for dylan
  :
- : Copyright (c) 2010 Nuno Job [about.nunojob.com]. All Rights Reserved.
+ : Copyright (c) 2010 Nuno Job [nunojob.com]. All Rights Reserved.
  :
  : Licensed under the Apache License, Version 2.0 (the "License");
  : you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ let   $uri       := xdmp:get-request-field( "_uri" )
   let $format    := xdmp:uri-format( $uri ) 
   let $mimetype  := xdmp:uri-content-type( $uri ) 
   let $doc       := fn:doc($uri)
-  return if ( $doc )
-         then ( xdmp:set-response-content-type( $mimetype ), $doc )
-         else ()
+  return 
+    if ( $doc )
+    then ( xdmp:set-response-content-type( $mimetype ), $doc )
+    else ()

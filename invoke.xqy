@@ -1,7 +1,7 @@
 (:
  : Invoker for Dylan 
  :
- : Copyright (c) 2010 Nuno Job [about.nunojob.com]. All Rights Reserved.
+ : Copyright (c) 2010 Nuno Job [nunojob.com]. All Rights Reserved.
  :
  : Licensed under the Apache License, Version 2.0 (the "License");
  : you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import module namespace s = "http://ns.dscape.org/2010/dylan/string"
     at "/lib/common/string.xqy" ;
 
 let $action := d:action()
-  return if ( $action = 'default' )
-         then xdmp:invoke( s:q( "/resources/$1.xqy", ( d:resource() ) ), () ) 
-         else "redirecting --- not really.."
+  return 
+    if ( $action = 'default' )
+    then xdmp:invoke( s:q( "/resources/$1.xqy", ( d:resource() ) ), () ) 
+    else "redirecting --- not really.."

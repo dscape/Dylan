@@ -28,14 +28,14 @@ declare variable $content-types :=
   ( "application/xhtml+xml", "application/xml" ) ;
 declare variable $default-type  := "application/xml" ;
 
-declare function d:render( $resource, $template, $params ) {
-  let $content-type := d:content-type()
+declare function d:render( $resource, $representation, $params ) {
+  let $content-type   := d:content-type()
     let $format       := $content-type//d:ext
     let $template     := fn:lower-case( $template )
     let $http-code    := ( $params//d:http-code, 200 ) [1]
     let $description  := ( $params//d:description, "OK" ) [1]
-    let $uri          := s:q( "/views/$1/$2.$3.xqy", 
-                                 ( $resource, $template, $format ) )
+    let $uri          := s:q( "/representations/$1/$2.$3.xqy", 
+                                 ( $resource, $representation, $format ) )
     let $_ := xdmp:set-response-content-type( $content-type//text() )
     let $_ := xdmp:set-response-code( $http-code, $description )
     return xdmp:invoke( $uri, ( xs:QName( "params" ), 

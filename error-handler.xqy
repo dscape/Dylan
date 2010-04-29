@@ -1,7 +1,7 @@
 (:
  : Error Handler for Dylan
  :
- : Copyright (c) 2010 Nuno Job [about.nunojob.com]. All Rights Reserved.
+ : Copyright (c) 2010 Nuno Job [nunojob.com]. All Rights Reserved.
  :
  : Licensed under the Apache License, Version 2.0 (the "License");
  : you may not use this file except in compliance with the License.
@@ -35,4 +35,4 @@ let $message := if ($code = 401) then
 return
   rdbc:error($code, $message, $stack)
 
-(: Can be redirected to log as well, for auditing :)
+(: Can be redirected to log as well for auditing :)

@@ -1,7 +1,7 @@
 (:
  : Sample Model in Dylan - while there are no generators
  :
- : Copyright (c) 2010 Nuno Job [about.nunojob.com]. All Rights Reserved.
+ : Copyright (c) 2010 Nuno Job [nunojob.com]. All Rights Reserved.
  :
  : Licensed under the Apache License, Version 2.0 (the "License");
  : you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
  : affiliated with the Apache Software Foundation.
  :)
 xquery version "1.0-ml";
-module namespace album = "my-album";
+module namespace album = "dylan::status";
 
 declare function album:find-by-title( $title ) {
-  fn:doc() /album [ title = xdmp:url-decode( $title ) ] } ;
+  fn:doc() /status [ title = xdmp:url-decode( $title ) ] } ;

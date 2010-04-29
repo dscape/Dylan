@@ -1,7 +1,7 @@
 (:
  : Sample Resource in Dylan - while there are no generators
  :
- : Copyright (c) 2010 Nuno Job [about.nunojob.com]. All Rights Reserved.
+ : Copyright (c) 2010 Nuno Job [nunojob.com]. All Rights Reserved.
  :
  : Licensed under the Apache License, Version 2.0 (the "License");
  : you may not use this file except in compliance with the License.
@@ -24,16 +24,16 @@ import module
   at "/lib/dylan/base.xqy";
 
 import module 
-  namespace album = "my-album"
-  at "/models/album.xqy";
+  namespace album = "dylan::status"
+  at "/models/status.xqy";
 
 declare function local:list( $request ) {
-  d:render( 'album', 'list', () ) } ; (: good example for method missing :)
+  d:render( 'status', 'list', () ) } ; 
 
 declare function local:get( $request ) {
   let $title := d:id()
     let $album := album:find-by-title ( $title )
-    return d:render( "album", "get", $album ) } ;
+    return d:render( "status", "get", $album ) } ;
 
 declare function local:post( $request ) {
   d:error( 501, "Not implemented yet", $request ) } ;
@@ -44,9 +44,6 @@ declare function local:put( $request ) {
 declare function local:delete( $request ) {
   d:error( 501, "Not implemented yet", $request ) } ;
 
-    let $_ := xdmp:log("-------------------------------")
-    let $_ := xdmp:log( d:request() )
-    let $_ := xdmp:log("-------------------------------")  
 let $action  := ( d:function(), d:action() ) [ . != "" ] [1]
   return try { xdmp:apply( xdmp:function( xs:QName(
     fn:concat( "local:", $action ) ) ), () ) } catch ( $e ) {
