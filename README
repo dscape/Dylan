@@ -20,6 +20,8 @@ Next steps
   - Add method to sanitize input, or make it automatic with the generated
     xml. Maybe sanitized inputs
   - No layouts… We need layouts or its just crazy
+  - Make a twitter like chat app (just for javscript)
+  - Improve code - too early stages and ugly
     
 
 I'm trying to get ahead of you, but what's this cache thingy?

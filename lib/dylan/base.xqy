@@ -27,25 +27,31 @@ import module namespace s = "http://ns.dscape.org/2010/dylan/string"
 declare variable $content-types :=
   ( "application/xhtml+xml", "application/xml" ) ;
 declare variable $default-type  := "application/xml" ;
+declare variable $default-opts  := <options xmlns="xdmp:eval">
+   <isolation>different-transaction</isolation>
+   <prevent-deadlocks>true</prevent-deadlocks>
+ </options> ;
 
 declare function d:render( $resource, $representation, $params ) {
+  d:render( $resource, $representation, $params, 'default' ) } ;
+
+declare function d:render( $resource, $representation, $params, $template ) {
   let $content-type   := d:content-type()
+  
     let $format       := $content-type//d:ext
-    let $template     := fn:lower-case( $template )
+    let $template     := if($template) then fn:lower-case( $template ) else 'default'
     let $http-code    := ( $params//d:http-code, 200 ) [1]
     let $description  := ( $params//d:description, "OK" ) [1]
     let $uri          := s:q( "/representations/$1/$2.$3.xqy", 
                                  ( $resource, $representation, $format ) )
     let $_ := xdmp:set-response-content-type( $content-type//text() )
     let $_ := xdmp:set-response-code( $http-code, $description )
-    return xdmp:invoke( $uri, ( xs:QName( "params" ), 
+    let $sections := xdmp:invoke( $uri, ( xs:QName( "params" ), 
              if( $params ) 
              then $params 
-             else <d:empty/>),
-             <options xmlns="xdmp:eval">
-               <isolation>different-transaction</isolation>
-               <prevent-deadlocks>true</prevent-deadlocks>
-             </options> ) };
+             else <d:empty/>), $default-opts ) 
+    return xdmp:invoke( s:q( "/templates/$1.$2.xqy", ($template, $format) ), 
+      (xs:QName( "sections" ), $sections ), $default-opts ) };
 
 declare function d:content-type() {
   let $accept-types := fn:tokenize( fn:replace( 

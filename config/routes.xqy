@@ -21,7 +21,9 @@ declare variable $routes :=
   <match path="/activate/:key"> <to> user#activate </to> </match>
   <root> status#list </root> 
   <match path="/:resource/:function/:id"/>
-<!-- Other useful to know defaults:
+<!-- Going to change to chat application once basic is running
+
+  Other useful to know defaults:
   - /images/
   - /css/
   - /js/
